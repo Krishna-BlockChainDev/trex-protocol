@@ -1,11 +1,11 @@
 kind: fargate-stack
 stackName: trex-protocol-dev
 env:
-  account: '202612168635'
+  account: ''
   region: ap-southeast-2
 target:
-  vpcId: vpc-01161a5c4ddf85f13
-  securityGroupId: sg-038cfbbb4e2f3c348
+  vpcId:
+  securityGroupId:
   clusterName: bwav-staging-cluster
 service:
   container:
@@ -27,8 +27,8 @@ service:
       - WALLETCONNECT_PROJECT_ID
   loadBalancer:
     enabled: true
-    certificateArn: arn:aws:acm:ap-southeast-2:202612168635:certificate/7034cf44-34a4-4bf6-84e7-2ebad68bafd0
-    host: sam-dev.bwavkinesis.net
+    certificateArn:
+    host:
     cloudFrontSecret: '***REMOVED***'
     defaultHealthCheck: '/v1/health-check'
     targetGroups:
@@ -37,6 +37,6 @@ service:
   securityGroupRules:
     enabled: true
     peers:
-      - securityGroupId: sg-0aaa456b7250f7db6
+      - securityGroupId:
         port: 5432
         name: aurora
