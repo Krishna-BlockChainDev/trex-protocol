@@ -1,0 +1,22 @@
+{
+  "name": "etherscan-label-fetcher",
+  "version": "1.0.0",
+  "description": "Fetch Etherscan mainnet labels for a list of addresses and export to JSON + Excel",
+  "main": "fetch-etherscan-labels.ts",
+  "scripts": {
+    "fetch": "ts-node fetch-etherscan-labels.ts",
+    "fetch:input": "ts-node fetch-etherscan-labels.ts --input",
+    "build": "tsc --outDir dist",
+    "fetch:compiled": "node dist/fetch-etherscan-labels.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}

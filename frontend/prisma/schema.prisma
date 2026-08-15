@@ -1,0 +1,236 @@
+// Prisma schema for ERC-3643 T-REX Dashboard
+// Engine: PostgreSQL  |  ORM: Prisma 5
+//
+// Two-layer architecture:
+//   ChainInfrastructure – shared contracts deployed once per chain
+//                         (implementations, authority, factory, compliance modules)
+//   TokenEcosystem      – per-token proxy suite deployed via TREXFactory.deployTREXSuite()
+//   Identity            – wallet → OnchainID mapping, scoped per ecosystem
+//   ComplianceRule      – module configuration, scoped per ecosystem
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── ChainInfrastructure ───────────────────────────────────────────────────────
+// One row per chain — deployed once and shared by all token ecosystems.
+// Stores: implementation contracts, TREXImplementationAuthority, TREXFactory,
+//         OID contracts, and stateless compliance modules.
+
+model ChainInfrastructure {
+  id      String @id @default(uuid())
+  chainId Int    @unique
+
+  // ── TREX implementation contracts (reused by all proxies via IA) ──────────
+  implToken                       String
+  implIdentityRegistry            String
+  implIdentityRegistryStorage     String
+  implTrustedIssuersRegistry      String
+  implClaimTopicsRegistry         String
+  implModularCompliance           String
+
+  // ── OnchainID implementation contracts ────────────────────────────────────
+  implOIDIdentity                 String
+  oidImplementationAuthority      String
+  oidIdFactory                    String
+
+  // ── Authority & factory ───────────────────────────────────────────────────
+  trexImplementationAuthority     String
+  trexFactory                     String
+
+  // ── Stateless compliance modules (shared across all tokens on this chain) ─
+  moduleCountryRestrict           String?
+  moduleCountryAllow              String?
+  moduleMaxBalance                String?
+  moduleSupplyLimit               String?
+
+  deployedBy String
+  deployedAt DateTime
+
+  tokens TokenEcosystem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("chain_infrastructure")
+}
+
+// ── TokenEcosystem ────────────────────────────────────────────────────────────
+// One row per token deployed via TREXFactory.deployTREXSuite().
+// Stores only the per-token proxy addresses; shared infra is in ChainInfrastructure.
+
+model TokenEcosystem {
+  id   String @id @default(uuid())
+
+  name     String
+  symbol   String
+  decimals Int    @default(18)
+  chainId  Int
+
+  /// CREATE2 salt used in TREXFactory.deployTREXSuite()
+  salt String
+
+  // ── Per-token proxy addresses (deployed by TREXFactory via CREATE2) ───────
+  tokenProxy                   String
+  identityRegistryProxy        String
+  identityRegistryStorageProxy String
+  trustedIssuersRegistryProxy  String
+  claimTopicsRegistryProxy     String
+  modularComplianceProxy       String
+
+  // ── Token-specific contracts ──────────────────────────────────────────────
+  tokenOnchainID String
+  claimIssuer    String
+
+  deployerAddress String
+  deployedAt      DateTime
+
+  /// Last time Etherscan was polled for new transactions (null = never synced)
+  lastSyncedAt    DateTime?
+  /// Last block number that was fully synced (0 = not yet synced)
+  lastSyncedBlock BigInt   @default(0)
+
+  infrastructure ChainInfrastructure @relation(fields: [chainId], references: [chainId])
+  identities     Identity[]
+  complianceRules ComplianceRule[]
+  transactions   TokenTransaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /// A deployer can only register the same symbol once per chain
+  @@unique([chainId, symbol, deployerAddress])
+  /// Salt must be unique per chain (CREATE2 guarantees uniqueness but DB enforces it too)
+  @@unique([chainId, salt])
+  @@index([chainId])
+  @@index([deployerAddress])
+  @@map("token_ecosystem")
+}
+
+// ── Identity ──────────────────────────────────────────────────────────────────
+// Tracks every registered investor/identity in an ecosystem.
+
+model Identity {
+  id String @id @default(uuid())
+  walletAddress   String
+  identityAddress String
+  countryCode     Int    @default(0)
+  claimTopics     Int[]
+
+  ecosystemId String
+  ecosystem   TokenEcosystem @relation(fields: [ecosystemId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /// One OnchainID per wallet per ecosystem
+  @@unique([ecosystemId, walletAddress])
+  @@index([ecosystemId])
+  @@index([walletAddress])
+  @@map("identity")
+}
+
+// ── ComplianceRule ────────────────────────────────────────────────────────────
+// Active configuration for each compliance module in an ecosystem.
+// One row per module per ecosystem — upserted whenever the config changes.
+
+model ComplianceRule {
+  id String @id @default(uuid())
+
+  /// Module identifier: countryRestrict | countryAllow | maxBalance | supplyLimit
+  module   String
+  /// Whether the module is currently bound on-chain
+  isActive Boolean @default(true)
+  /// Module-specific parameters as JSON (country list, balance cap, supply cap, etc.)
+  params   Json
+
+  ecosystemId String
+  ecosystem   TokenEcosystem @relation(fields: [ecosystemId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /// One config row per module per ecosystem
+  @@unique([ecosystemId, module])
+  @@index([ecosystemId])
+  @@index([module])
+  @@map("compliance_rule")
+}
+
+// ── TokenTransaction ──────────────────────────────────────────────────────────
+// Unified on-chain transaction log covering all UI-triggered operations:
+//   Token     – mint / burn / transfer / forcedTransfer / freeze / pause
+//   Identity  – createIdentity / registerIdentity / addClaim / removeClaim
+//   Compliance – addModule / removeModule / setMaxBalance / setSupplyLimit / setCountries
+//   System    – deployment events
+//
+// Populated two ways:
+//   1. Auto-synced from Etherscan/BscScan explorer (GET /api/transactions)
+//   2. Recorded inline after each UI action (POST /api/transactions/record)
+
+model TokenTransaction {
+  id String @id @default(uuid())
+
+  /// Transaction hash (on-chain tx hash)
+  txHash      String
+  /// Block number (0 when recorded before confirmation)
+  blockNumber BigInt   @default(0)
+  /// Block timestamp (or DateTime.now() for UI-recorded txs before confirmation)
+  timestamp   DateTime
+  /// High-level category: Token | Identity | Compliance | System
+  category    String   @default("Token")
+  /// ERC-3643 event type:
+  ///   Token      – Transfer | Mint | Burn | ForcedTransfer | TokensFrozen | TokensUnfrozen | AddressFrozen | AddressUnfrozen | Paused | Unpaused | Recovery
+  ///   Identity   – CreateIdentity | RegisterIdentity | AddClaim | RemoveClaim
+  ///   Compliance – AddModule | RemoveModule | SetMaxBalance | SetSupplyLimit | SetCountryRestrict | SetCountryAllow
+  ///   System     – Deploy
+  eventType   String
+  /// Initiator / from address (zero address = unknown)
+  fromAddress String   @default("0x0000000000000000000000000000000000000000")
+  /// Recipient / affected address (zero address for non-transfer events)
+  toAddress   String   @default("0x0000000000000000000000000000000000000000")
+  /// Raw token amount as decimal string (0 for non-token ops)
+  amount      String   @default("0")
+  /// Optional: agent/operator that triggered the action
+  operatorAddress String?
+  /// Optional: freeform JSON string for extra context (module address, country codes, etc.)
+  metadata    String?
+
+  // ── On-chain execution details (populated from Etherscan tx enrichment) ─────
+  /// Transaction status: success | failed | pending
+  txStatus    String?
+  /// Gas units consumed by this transaction
+  gasUsed     BigInt?
+  /// Gas price in wei
+  gasPrice    String?
+  /// Total transaction fee in wei (gasUsed × gasPrice)
+  txFee       String?
+  /// Sender's nonce at the time of this transaction
+  nonce       Int?
+  /// Transaction index within the block
+  txIndex     Int?
+  /// Address that submitted this transaction on-chain (may differ from fromAddress for relayed txs)
+  senderAddress String?
+
+  /// FK to the ecosystem this transaction belongs to
+  ecosystemId String
+  ecosystem   TokenEcosystem @relation(fields: [ecosystemId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /// One row per (ecosystem, txHash, eventType) — prevents duplicates from explorer re-syncs
+  @@unique([ecosystemId, txHash, eventType])
+  @@index([ecosystemId])
+  @@index([category])
+  @@index([txHash])
+  @@index([fromAddress])
+  @@index([toAddress])
+  @@index([timestamp])
+  @@map("token_transaction")
+}

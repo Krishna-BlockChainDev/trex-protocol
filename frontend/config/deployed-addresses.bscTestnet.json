@@ -1,0 +1,18 @@
+{
+  "implementations": {
+    "token": "0x29cf2cE679f32ee2B2E05dd99BDf6727462a737f",
+    "identityRegistry": "0x81B5508367FE405f6D9ACebe87366E30464EAD89",
+    "identityRegistryStorage": "0x58f8c1d2dac803e816fAE745Fbf02A42AFed48E2",
+    "trustedIssuersRegistry": "0x79A1C42E44a1d6CDE27607cC35Da8DFE8441cB63",
+    "claimTopicsRegistry": "0x3e309341046f6F81D0609657427E079D75c78Ef9",
+    "modularCompliance": "0xD9eE352dfD5692Aab99Fa17e22e41A564efc5803",
+    "onchainIDIdentity": "0x28aa3908153ccd1BCd13828FAa577cBf185559b8",
+    "onchainIDImplementationAuthority": "0xCB566ede79C06Bc23042cA04c6808D71Fac11200",
+    "onchainIDFactory": "0x92197aA83152cCf8420B1B792aD6b0F49Fa059DA"
+  },
+  "authority": {
+    "trexImplementationAuthority": "0x41aDAE4b24EB35EFE4c042B42d7c7A8Abc52CeDf",
+    "trexFactory": "0xA5c0bFABd3B761B635df772D0DB41535132E0d81"
+  },
+  "modules": {}
+}

@@ -1,0 +1,36 @@
+# docker-compose.yml — ERC-3643 T-REX Dashboard
+#
+# Services:
+#   postgres  — PostgreSQL 16 database for the Next.js dashboard
+#
+# Usage:
+#   docker compose up -d          # start in background
+#   docker compose down           # stop (data persisted in volume)
+#   docker compose down -v        # stop AND wipe all data
+#
+# The DATABASE_URL in frontend/.env.local is pre-configured to connect
+# to this container:
+#   postgresql://postgres:trex_dev_pass@localhost:5432/trex_dashboard
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: trex_postgres1
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: trex_dev_pass
+      POSTGRES_DB: trex_dashboard
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d trex_dashboard']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    name: trex_postgres_data

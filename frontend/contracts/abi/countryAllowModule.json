@@ -1,0 +1,134 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_compliance",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint16",
+        "name": "_country",
+        "type": "uint16"
+      }
+    ],
+    "name": "CountryAllowed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_compliance",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint16",
+        "name": "_country",
+        "type": "uint16"
+      }
+    ],
+    "name": "CountryUnallowed",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint16", "name": "_country", "type": "uint16" }
+    ],
+    "name": "addAllowedCountry",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint16", "name": "_country", "type": "uint16" }
+    ],
+    "name": "removeAllowedCountry",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint16[]", "name": "_countries", "type": "uint16[]" }
+    ],
+    "name": "batchAllowCountries",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint16[]", "name": "_countries", "type": "uint16[]" }
+    ],
+    "name": "batchDisallowCountries",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_compliance", "type": "address" },
+      { "internalType": "uint16", "name": "_country", "type": "uint16" }
+    ],
+    "name": "isCountryAllowed",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_compliance", "type": "address" }
+    ],
+    "name": "isComplianceBound",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isPlugAndPlay",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "canComplianceBind",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "name",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_compliance", "type": "address" }
+    ],
+    "name": "bindCompliance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_compliance", "type": "address" }
+    ],
+    "name": "unbindCompliance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

@@ -1,0 +1,23 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Set BUILD_ENV=qa (default) or BUILD_ENV=prod before running
+        # docker compose build / docker compose up --build
+        BUILD_ENV: ${BUILD_ENV:-qa}
+    # At runtime the container only needs server-side secrets (ISSUER_PRIVATE_KEY).
+    # NEXT_PUBLIC_* vars are already baked into the JS bundle during build.
+    # For local dev you can override with a .env.local file or inline env vars.
+    env_file:
+      - .env.${BUILD_ENV:-qa}
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:3000/v1/health-check']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

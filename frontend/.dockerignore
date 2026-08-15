@@ -1,0 +1,40 @@
+# Dependencies – reinstalled inside Docker
+node_modules
+
+# Next.js build output – rebuilt inside Docker
+.next
+
+# Local environment files – secrets must come from ECS / Secrets Manager
+.env
+.env.local
+.env.*.local
+
+# Development tooling
+.eslintcache
+*.log
+npm-debug.log*
+
+# Version control
+.git
+.gitignore
+
+# Editor
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS artefacts
+.DS_Store
+Thumbs.db
+
+# CI / test artefacts
+coverage
+__tests__
+*.test.ts
+*.spec.ts
+
+# Docker files themselves (no need to copy into the image)
+Dockerfile
+.dockerignore
+docker-compose.yml

@@ -1,0 +1,61 @@
+{
+  "sepolia": {
+    "implementations": {
+      "token": "0x9b165d9f2FEf2d738D6BaDCdDe96F94800b8ad33",
+      "identityRegistry": "0x735553eaD8213fa28fD4cA83Fc07447a627ba585",
+      "identityRegistryStorage": "0x5ED53edDEC8Ae121063Cf40D44A8EE67D724916E",
+      "trustedIssuersRegistry": "0xCA46b540e2909d1984D1f5F2369baFD7715D2F35",
+      "claimTopicsRegistry": "0xFdb1fA08A5D9A10aEdF00052B671b053a584293e",
+      "modularCompliance": "0xCEe6F99F82fB6Af54FA106aeEbb4878cb34B253c",
+      "onchainIDIdentity": "0x21225C16634ade0487a242eFDF2eB7161f116E55",
+      "onchainIDImplementationAuthority": "0x67E236dF1aFEf96Af58421f042e8B452452F4e58",
+      "onchainIDFactory": "0x81EbD2D986fE122768da84b47877a65677550902"
+    },
+    "authority": {
+      "trexImplementationAuthority": "0xB76049621fF12613796a90a8CaF5ddff5f9Fd06A",
+      "trexFactory": "0x092f80ceE87e83eF048A03824De8a7e7532577B3"
+    },
+    "modules": {
+      "countryRestrictModule": "0x8568b3D5b2118015a7479d83C47885Bba0716005",
+      "countryAllowModule": "0x0f807c280EeD161a873D454eC6B10E3d47183474",
+      "maxBalanceModule": "0xe61fa093aBb5c1371D44dA673A7628A5b5662089",
+      "supplyLimitModule": "0xEb85b8D4D2834168812EA3197F78A978359d87DC"
+    }
+  },
+  "hardhat": {
+    "implementations": {
+      "token": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      "identityRegistry": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      "identityRegistryStorage": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      "trustedIssuersRegistry": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "claimTopicsRegistry": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "modularCompliance": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+      "onchainIDIdentity": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+      "onchainIDImplementationAuthority": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+      "onchainIDFactory": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"
+    },
+    "authority": {
+      "trexImplementationAuthority": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+      "trexFactory": "0x0B306BF915C4d645ff596e518fAf3F9669b97016"
+    },
+    "modules": {}
+  },
+  "bscTestnet": {
+    "implementations": {
+      "token": "0x29cf2cE679f32ee2B2E05dd99BDf6727462a737f",
+      "identityRegistry": "0x81B5508367FE405f6D9ACebe87366E30464EAD89",
+      "identityRegistryStorage": "0x58f8c1d2dac803e816fAE745Fbf02A42AFed48E2",
+      "trustedIssuersRegistry": "0x79A1C42E44a1d6CDE27607cC35Da8DFE8441cB63",
+      "claimTopicsRegistry": "0x3e309341046f6F81D0609657427E079D75c78Ef9",
+      "modularCompliance": "0xD9eE352dfD5692Aab99Fa17e22e41A564efc5803",
+      "onchainIDIdentity": "0x28aa3908153ccd1BCd13828FAa577cBf185559b8",
+      "onchainIDImplementationAuthority": "0xCB566ede79C06Bc23042cA04c6808D71Fac11200",
+      "onchainIDFactory": "0x92197aA83152cCf8420B1B792aD6b0F49Fa059DA"
+    },
+    "authority": {
+      "trexImplementationAuthority": "0x41aDAE4b24EB35EFE4c042B42d7c7A8Abc52CeDf",
+      "trexFactory": "0xA5c0bFABd3B761B635df772D0DB41535132E0d81"
+    },
+    "modules": {}
+  }
+}

@@ -1,0 +1,42 @@
+kind: fargate-stack
+stackName: trex-protocol-dev
+env:
+  account: '202612168635'
+  region: ap-southeast-2
+target:
+  vpcId: vpc-01161a5c4ddf85f13
+  securityGroupId: sg-038cfbbb4e2f3c348
+  clusterName: bwav-staging-cluster
+service:
+  container:
+    repositoryName: trex-protocol
+    tag: 'latest'
+  desiredCount: 1
+  containerPort: 3000
+  environment:
+    PORT: '3000'
+    NO_COLOR: 'true'
+    NEXT_TELEMETRY_DISABLED: '1'
+    BSC_TESTNET_RPC_URL: 'https://data-seed-prebsc-1-s1.binance.org:8545'
+  secret:
+    secretArn: '***REMOVED***'
+    secretNames:
+      - ISSUER_PRIVATE_KEY
+      - SEPOLIA_RPC_URL
+      - MAINNET_RPC_URL
+      - WALLETCONNECT_PROJECT_ID
+  loadBalancer:
+    enabled: true
+    certificateArn: arn:aws:acm:ap-southeast-2:202612168635:certificate/7034cf44-34a4-4bf6-84e7-2ebad68bafd0
+    host: sam-dev.bwavkinesis.net
+    cloudFrontSecret: '***REMOVED***'
+    defaultHealthCheck: '/v1/health-check'
+    targetGroups:
+      - name: 'catch-all'
+        prefix: '/*'
+  securityGroupRules:
+    enabled: true
+    peers:
+      - securityGroupId: sg-0aaa456b7250f7db6
+        port: 5432
+        name: aurora
