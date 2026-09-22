@@ -1,17 +1,20 @@
 import type { NextConfig } from 'next';
 import path from 'path';
 
-// Resolve the true root of this package (frontend/).
-// This silences the "multiple lockfiles" warning Vercel emits when
-// deploying a monorepo — Next.js was incorrectly walking up to the repo
-// root and finding unrelated lockfiles in sibling packages.
+// Vercel sets VERCEL=1 in its build environment automatically.
+// outputFileTracingRoot must NOT be set on Vercel — it causes Vercel's
+// deployment scanner to mis-locate .next/routes-manifest-deterministic.json
+// (ENOENT). Locally it silences the "multiple lockfiles" warning caused by
+// Next.js walking up to the monorepo root.
+const isVercel = Boolean(process.env.VERCEL);
 const packageRoot = path.resolve(__dirname);
 
 const nextConfig: NextConfig = {
-  // Tell Next.js that frontend/ is the boundary for file-system tracing.
-  // Moved to top-level in Next.js 15+ (was experimental.outputFileTracingRoot).
-  outputFileTracingRoot: packageRoot,
+  // Only set when running locally in the monorepo context (not on Vercel).
+  ...(!isVercel ? { outputFileTracingRoot: packageRoot } : {}),
+
   reactStrictMode: true,
+
   // 'standalone' output is required for Docker / ECS Fargate deployments —
   // it produces .next/standalone, a self-contained Node.js server with no
   // node_modules at runtime.
@@ -22,6 +25,7 @@ const nextConfig: NextConfig = {
   ...(process.env.NEXT_OUTPUT_MODE === 'standalone'
     ? { output: 'standalone' }
     : {}),
+
   transpilePackages: ['@rainbow-me/rainbowkit', 'antd', '@ant-design/icons'],
 
   async rewrites() {
