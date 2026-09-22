@@ -17,39 +17,39 @@
  */
 
 // ── TREX registry implementations ────────────────────────────────────────────
-import ClaimTopicsRegistryJson from '../../smart-contracts/artifacts/contracts/registry/implementation/ClaimTopicsRegistry.sol/ClaimTopicsRegistry.json';
-import TrustedIssuersRegistryJson from '../../smart-contracts/artifacts/contracts/registry/implementation/TrustedIssuersRegistry.sol/TrustedIssuersRegistry.json';
-import IdentityRegistryStorageJson from '../../smart-contracts/artifacts/contracts/registry/implementation/IdentityRegistryStorage.sol/IdentityRegistryStorage.json';
-import IdentityRegistryJson from '../../smart-contracts/artifacts/contracts/registry/implementation/IdentityRegistry.sol/IdentityRegistry.json';
+import ClaimTopicsRegistryJson from './artifacts/trex/registry/ClaimTopicsRegistry.json';
+import TrustedIssuersRegistryJson from './artifacts/trex/registry/TrustedIssuersRegistry.json';
+import IdentityRegistryStorageJson from './artifacts/trex/registry/IdentityRegistryStorage.json';
+import IdentityRegistryJson from './artifacts/trex/registry/IdentityRegistry.json';
 
 // ── TREX compliance / token implementations ───────────────────────────────────
-import ModularComplianceJson from '../../smart-contracts/artifacts/contracts/compliance/modular/ModularCompliance.sol/ModularCompliance.json';
-import TokenJson from '../../smart-contracts/artifacts/contracts/token/Token.sol/Token.json';
+import ModularComplianceJson from './artifacts/trex/compliance/ModularCompliance.json';
+import TokenJson from './artifacts/trex/token/Token.json';
 
 // ── TREX authority & factory ──────────────────────────────────────────────────
-import TREXImplementationAuthorityJson from '../../smart-contracts/artifacts/contracts/proxy/authority/TREXImplementationAuthority.sol/TREXImplementationAuthority.json';
-import TREXFactoryJson from '../../smart-contracts/artifacts/contracts/factory/TREXFactory.sol/TREXFactory.json';
+import TREXImplementationAuthorityJson from './artifacts/trex/proxy/TREXImplementationAuthority.json';
+import TREXFactoryJson from './artifacts/trex/factory/TREXFactory.json';
 
 // ── TREX proxies ──────────────────────────────────────────────────────────────
-import ClaimTopicsRegistryProxyJson from '../../smart-contracts/artifacts/contracts/proxy/ClaimTopicsRegistryProxy.sol/ClaimTopicsRegistryProxy.json';
-import TrustedIssuersRegistryProxyJson from '../../smart-contracts/artifacts/contracts/proxy/TrustedIssuersRegistryProxy.sol/TrustedIssuersRegistryProxy.json';
-import IdentityRegistryStorageProxyJson from '../../smart-contracts/artifacts/contracts/proxy/IdentityRegistryStorageProxy.sol/IdentityRegistryStorageProxy.json';
-import IdentityRegistryProxyJson from '../../smart-contracts/artifacts/contracts/proxy/IdentityRegistryProxy.sol/IdentityRegistryProxy.json';
-import ModularComplianceProxyJson from '../../smart-contracts/artifacts/contracts/proxy/ModularComplianceProxy.sol/ModularComplianceProxy.json';
-import TokenProxyJson from '../../smart-contracts/artifacts/contracts/proxy/TokenProxy.sol/TokenProxy.json';
+import ClaimTopicsRegistryProxyJson from './artifacts/trex/proxy/ClaimTopicsRegistryProxy.json';
+import TrustedIssuersRegistryProxyJson from './artifacts/trex/proxy/TrustedIssuersRegistryProxy.json';
+import IdentityRegistryStorageProxyJson from './artifacts/trex/proxy/IdentityRegistryStorageProxy.json';
+import IdentityRegistryProxyJson from './artifacts/trex/proxy/IdentityRegistryProxy.json';
+import ModularComplianceProxyJson from './artifacts/trex/proxy/ModularComplianceProxy.json';
+import TokenProxyJson from './artifacts/trex/proxy/TokenProxy.json';
 
 // ── Compliance modules ────────────────────────────────────────────────────────
-import CountryRestrictModuleJson from '../../smart-contracts/artifacts/contracts/compliance/modular/modules/CountryRestrictModule.sol/CountryRestrictModule.json';
-import CountryAllowModuleJson from '../../smart-contracts/artifacts/contracts/compliance/modular/modules/CountryAllowModule.sol/CountryAllowModule.json';
-import MaxBalanceModuleJson from '../../smart-contracts/artifacts/contracts/compliance/modular/modules/MaxBalanceModule.sol/MaxBalanceModule.json';
-import SupplyLimitModuleJson from '../../smart-contracts/artifacts/contracts/compliance/modular/modules/SupplyLimitModule.sol/SupplyLimitModule.json';
+import CountryRestrictModuleJson from './artifacts/trex/compliance/CountryRestrictModule.json';
+import CountryAllowModuleJson from './artifacts/trex/compliance/CountryAllowModule.json';
+import MaxBalanceModuleJson from './artifacts/trex/compliance/MaxBalanceModule.json';
+import SupplyLimitModuleJson from './artifacts/trex/compliance/SupplyLimitModule.json';
 
 // ── OnchainID contracts ───────────────────────────────────────────────────────
-import OIDIdentityJson from '../../smart-contracts/node_modules/@onchain-id/solidity/artifacts/contracts/Identity.sol/Identity.json';
-import OIDImplementationAuthorityJson from '../../smart-contracts/node_modules/@onchain-id/solidity/artifacts/contracts/proxy/ImplementationAuthority.sol/ImplementationAuthority.json';
-import OIDIdFactoryJson from '../../smart-contracts/node_modules/@onchain-id/solidity/artifacts/contracts/factory/IdFactory.sol/IdFactory.json';
-import OIDIdentityProxyJson from '../../smart-contracts/node_modules/@onchain-id/solidity/artifacts/contracts/proxy/IdentityProxy.sol/IdentityProxy.json';
-import OIDClaimIssuerJson from '../../smart-contracts/node_modules/@onchain-id/solidity/artifacts/contracts/ClaimIssuer.sol/ClaimIssuer.json';
+import OIDIdentityJson from './artifacts/onchainid/Identity.json';
+import OIDImplementationAuthorityJson from './artifacts/onchainid/ImplementationAuthority.json';
+import OIDIdFactoryJson from './artifacts/onchainid/IdFactory.json';
+import OIDIdentityProxyJson from './artifacts/onchainid/IdentityProxy.json';
+import OIDClaimIssuerJson from './artifacts/onchainid/ClaimIssuer.json';
 
 // ── Type helper ───────────────────────────────────────────────────────────────
 type Artifact = {
